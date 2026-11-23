@@ -17,7 +17,7 @@ Fill this exactly when writing `plan.md`. Delete optional parts that would be em
 
 **Done when:** [What's true for users once this phase ships.]
 
-- [Optional, Phase 1 only: Set up the [feature] data model. Tables, enums, access policies, and permissions from data-model.md.]
+- [Optional: Set up the [feature] data model. Tables, enums, access policies, and permissions from data-model.md. Phase 1 only, or first in each phase when the data model is split by phase.]
 
 - [Behavior or change, end to end. This becomes one ticket.]
   - [Detail the ticket needs]
@@ -46,6 +46,17 @@ Fill this exactly when writing `plan.md`. Delete optional parts that would be em
 - [Behavior or change.]
 
 - [Behavior or change.]
+
+## Test plan
+
+[When it runs, e.g. "Runs once Phase 3 is built, and must pass before the pilot."]
+
+- [Load, acceptance, or pilot check.]
+  - [What it measures or proves]
+
+## Parallel work (outside phases)
+
+- [Item that can start any time, with its ticket ID if one exists.]
 
 ## Open questions
 

@@ -10,7 +10,7 @@ description: >
   create an implementation plan, break a PRD into phases or tickets, plan a
   feature or refactor from a PRD, or runs /plan-phases.
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Plan Phases
@@ -42,7 +42,11 @@ does not restate the problem, goals, or requirements. It orders the work.
   end to end (database, API, UI, permissions, tests). Split work by behavior,
   never by layer: no "Build the API" or "Build the UI" bullets. The only
   usual exception is one database-foundation bullet at the start of Phase 1
-  that owns all schema and migration work.
+  that owns all schema and migration work, or one at the start of each phase
+  when the data model is split by phase.
+- **Phases are delivery, not testing.** Load tests, acceptance runs, and
+  pilots go in a **Test plan** section, not a phase. Non-test release work
+  (docs, rollout) goes in the phase that ships the behavior.
 - **Sub-bullets carry what the ticket needs**: fields, button states, edge
   cases, permission rules, which existing pattern to follow.
 - **Plain-English behavior**, not code tasks. Write "Allow archiving a
@@ -118,8 +122,18 @@ Before asking anything, draft the phase outline yourself:
   one state, one user type, one section family), not by layer.
 - If the feature needs new tables, put one "Set up the [feature] data model"
   bullet first in Phase 1. It covers schema, migrations, enums, access
-  policies, and permission seeds, so later slices don't fight over migrations and can be
-  built in parallel.
+  policies, and permission seeds, so later slices don't fight over
+  migrations and can be built in parallel. When early phases ship
+  separately and don't need the later tables, ask whether to split it: each
+  phase then starts with the schema it needs.
+- If a large phase mixes several screens or workflows, split it into
+  sequential phases by screen or workflow rather than keeping one big phase.
+- Items that don't depend on any phase (for example an existing ticket that
+  can start any time) go under **Parallel work (outside phases)**.
+- Check whether PRD items are already built or already ticketed (in the code
+  or, when one is connected, in the issue tracker named in project
+  knowledge). Built items go under "Not in this plan"; ticketed items keep
+  their ticket ID.
 - Note dependencies that aren't obvious from the order.
 - Note every point where the PRD is ambiguous, contradicts itself, or leaves
   a decision open.
@@ -135,8 +149,8 @@ Then ask only what changes the plan. Good questions:
 - Ambiguities that would produce two different tickets depending on the answer
 - Grouping, when it is unclear whether items are one ticket or several
 
-Do not ask about anything the PRD, code, or project knowledge already answers, or about
-implementation details that belong in the ticket itself.
+Do not ask about anything the PRD, code, or project knowledge already
+answers, or about implementation details that belong in the ticket itself.
 
 Rules:
 
@@ -157,9 +171,10 @@ only, never anything specific to this feature.
 ### 7. Ask where to save the plan
 
 Always ask where to save the output. Suggest the save location from project
-knowledge when there is one, otherwise `plan.md` in the same folder as
-the PRD when the PRD is a local file; otherwise offer
-`docs/<feature-slug>/plan.md`. Do not overwrite an existing file without confirming.
+knowledge when there is one, otherwise `plan.md` in the same folder as the
+PRD when the PRD is a local file; otherwise offer
+`docs/<feature-slug>/plan.md`. Do not overwrite an existing file without
+confirming.
 
 ### 8. Write plan.md
 
@@ -173,6 +188,10 @@ be empty.
   doubles as the milestone description.
 - **Depends on:** only when the order isn't obvious. Use the phase line for a
   whole-phase dependency, or `(needs: ...)` on a single bullet.
+- **Test plan:** load, acceptance, and pilot checks that must pass before
+  rollout, with when they run. Delete the section if empty.
+- **Parallel work (outside phases):** items that can start any time. Delete
+  the section if empty.
 - **Open questions:** anything that blocks writing a ticket. Delete the
   section if empty.
 - **Not in this plan:** only things someone might reasonably expect to be
@@ -184,7 +203,9 @@ Self-check before finishing:
 - [ ] Every top-level bullet could be pasted into a ticket title and understood
 - [ ] No bullet is a code task; technical details appear only where necessary
 - [ ] Every bullet is a vertical slice; no phase or bullet is a single layer,
-      except the optional data-model bullet first in Phase 1
+      except the optional data-model bullet first in Phase 1 (or first in
+      each phase when the data model is split by phase)
+- [ ] No phase is only testing; tests and pilots are in the Test plan
 - [ ] No tables, diagrams, or sections copied from the PRD
 - [ ] Every phase has a "Done when"
 

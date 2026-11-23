@@ -28,8 +28,8 @@ Useful flags: `-g` installs globally instead of into the current project, `-a cl
 | --- | --- | --- |
 | [`design-data-model`](skills/design-data-model/SKILL.md) | Studies your existing schema (any ORM or SQL) and proposes tables, constraints, access rules, and a migration plan for a feature. | `data-model.md` |
 | [`create-prd`](skills/create-prd/SKILL.md) | Turns a feature idea or brief into a Product Requirements Document with numbered user stories and prioritized requirements. | `prd.md` |
-| [`plan-phases`](skills/plan-phases/SKILL.md) | Breaks a PRD into phases of vertical-slice items, each one ticket. | `plan.md` |
-| [`plan-tickets`](skills/plan-tickets/SKILL.md) | Turns the plan into sized, risk-rated tickets with dependencies and a parallel build order, ready for Linear, Jira, or GitHub Issues. | `tickets.md` |
+| [`plan-phases`](skills/plan-phases/SKILL.md) | Breaks a PRD into delivery phases of vertical-slice items, each one ticket, with a test plan and any work that can run outside the phases. | `plan.md` |
+| [`plan-tickets`](skills/plan-tickets/SKILL.md) | Turns the plan into tickets with a problem description, what to build, and testable acceptance criteria. Sizes them by human review time, rolls the sizes up per phase, and adds dependencies and a parallel build order. Checks your tracker (Linear, Jira, GitHub Issues) so existing issues aren't duplicated. | `tickets.md` |
 
 ### Planning flow
 

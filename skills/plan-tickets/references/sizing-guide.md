@@ -1,6 +1,9 @@
 # Sizing Guide
 
-Size by **delivery friction**, not code volume. Agents do the coding.
+Agents write the code, and they write it fast. Size by the **human time** a
+ticket needs: specifying it, reviewing the diff, verifying the behavior, and
+waiting on things outside the code (deploys, providers, evaluations, data
+backfills). Never size by code volume.
 
 ## Label
 
@@ -11,24 +14,51 @@ Size by **delivery friction**, not code volume. Agents do the coding.
 
 | Size | Target | Meaning |
 |------|--------|---------|
-| XS | 1–4h | Bounded, near-mechanical: one field, a toggle, a small UI tweak |
-| S | 0.5d | Small and clear: one endpoint, small CRUD, contained UI + backend change |
-| M | 1d | Standard vertical slice across several files |
-| L | 2d | Multi-step workflow with permissions, validation, backend, and UI |
-| XL | 3–5d | Too big. Split before writing the ticket |
+| XS | ≤ 2h | One agent session and a quick review: a migration copied from the data model, a field, a toggle, docs, or a slice that copies an existing pattern |
+| S | ~0.5d | Contained slice with a few rules to verify: one endpoint and its UI, a config or infra change, a small new pattern |
+| M | ~1d | Cross-layer slice with real verification: a new pattern, background jobs, an external provider, an evaluation, or many rules and states to test |
+| L | ~2d | Rare. High-risk core change with heavy verification that can't be split without breaking it. Name it as a split candidate in the report |
+| XL | — | Too big. Split before writing the ticket |
 
-Parent phase tickets are always L.
+## Phase (parent) size
+
+Roll a parent up from its children: XS = 0.25 day, S = 0.5 day, M = 1 day,
+L = 2 days. Then pick:
+
+| Total | Parent size |
+|-------|-------------|
+| ≤ 1 day | S |
+| ≤ 2 days | M |
+| ≤ 4 days | L |
+| > 4 days | Split the phase |
+
+The parent's sizing rationale lists its children's sizes and the total, e.g.
+"Rolled up from its tickets (XS, S, XS): about 1 day of review and
+verification."
 
 ## Deciding the size (in order)
 
-1. **Ambiguity:** unclear requirements → bigger, higher risk, or a spike first.
-2. **Blast radius:** schema change, shared infra, security surface → bump up.
-3. **Integration:** cross-layer, jobs, email, PDF, external providers → bump up.
-4. **Validation surface:** many flows or procedures to verify → bump up.
+1. **Default one size smaller than instinct.** What used to be an M is
+   usually an S now, and what used to be an L is usually an M.
+2. **Ambiguity:** unclear requirements → a spike first, or higher risk, not
+   a bigger size.
+3. **Verification surface:** many states, rules, or flows to check by hand
+   → bump up one size.
+4. **Outside waiting:** external providers, infra cutovers, evaluations,
+   data backfills on production volume → bump up one size.
 5. **Pattern fit:** copies an existing pattern → size down.
-6. **Default:** smaller. A traditional M is often S here.
+6. **Simple implementation stays small, whatever the risk.** Config
+   changes, route moves, schema copied from the data model, reason codes and
+   copy, docs, a new state on an existing component, and slices that reuse
+   an existing service path end to end are XS. Mark their risk instead.
+
+Most tickets should land at XS–S. M is only for slices with a long
+verification or outside wait (an evaluation, a high-blast-radius write path).
+L should almost never appear on a child ticket.
 
 ## Risk
+
+Risk is separate from size. A two-hour ticket can be High risk.
 
 - **Low:** clear, isolated, easy to validate and roll back.
 - **Medium:** some ambiguity, spans layers, moderate regression risk.
@@ -37,12 +67,13 @@ Parent phase tickets are always L.
 
 ## Sizing rationale
 
-One line naming the main drivers, e.g. "Cross-layer slice reusing the
-existing archive pattern" (S/Low) or "Schema foundation kept together to
-avoid migration dependency pain" (S/High).
+One line naming the main drivers, e.g. "Copies the existing archive
+pattern across layers" (XS/Low), "New external provider with retries and
+compliance limits" (M/High), or "Schema foundation kept together to avoid
+migration conflicts" (XS/Medium).
 
 ## Distribution
 
-Use the full range. If every ticket is M, the sizing is wrong. Keep a
+Use the full range. If most tickets are M or L, the sizing is wrong. Keep a
 ticket whole only when splitting it would create shared migration or
 dependency pain.
