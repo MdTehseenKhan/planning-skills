@@ -51,7 +51,9 @@ committing them so the whole team shares them.
   4. Write only the unanswered topics to `.agents/knowledge/project.md` (or
      `data-model.md`) using the template below. If the file exists, add the
      missing sections; don't rewrite sections someone else wrote.
-- Write the file once the answers are settled, before the skill's own output.
+- Once the answers are settled, show the user the sections you'll add and
+  write them only after they confirm, before the skill's own output. If they
+  decline, write nothing and use the answers for this run only.
 - In the report, name the file you created or extended and suggest committing
   it.
 

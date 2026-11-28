@@ -22,6 +22,25 @@ npx skills add MdTehseenKhan/planning-skills --list
 
 Useful flags: `-g` installs globally instead of into the current project, `-a claude-code` targets one agent, and `-y` skips prompts. To pin a release, use `MdTehseenKhan/planning-skills@v1.0.0`.
 
+## Update
+
+```bash
+# See which installed skills have a newer version
+npx skills check
+
+# Update all installed skills (asks for project or global scope)
+npx skills update
+
+# Update only global or only project installs
+npx skills update -g
+npx skills update -p
+
+# Update one skill
+npx skills update plan-tickets
+```
+
+A pinned install (`@v1.0.0`) stays on that tag. To move it, run `npx skills add` again with the new tag. Updating replaces each skill folder, so keep project notes in `.agents/knowledge/`, never inside a skill folder.
+
 ## Skills
 
 | Skill | What it does | Output |
@@ -40,7 +59,7 @@ design-data-model  →  create-prd  →  plan-phases  →  plan-tickets
 data-model.md         prd.md         plan.md         tickets.md
 ```
 
-Each skill works on its own, so install only the ones you want. You can start at any step, and you can skip `design-data-model` if the feature stores no new data. When a skill suggests a next step you haven't installed, it gives you the install command and carries on without it.
+Each skill works on its own, so install only the ones you want. You can start at any step, and you can skip `design-data-model` if the feature stores no new data. When a skill suggests a next step you haven't installed, it says the skill is optional and carries on without it.
 
 Each skill reads the relevant code first, asks only questions that change the output (at most two short rounds), and asks where to save before writing.
 
@@ -55,7 +74,7 @@ your-project/
     └── data-model.md   # Schema conventions: naming, keys, tenancy, access control, migrations
 ```
 
-- **First run:** the skill reads `AGENTS.md` and `CLAUDE.md`. If those already cover a topic, nothing is written for it. For any topic they miss, the skill answers from the code, asks you about what's still unknown (one short round), and writes only those topics.
+- **First run:** the skill reads `AGENTS.md` and `CLAUDE.md`. If those already cover a topic, nothing is written for it. For any topic they miss, the skill answers from the code, asks you about what's still unknown (one short round), shows you what it will add, and writes only those topics once you confirm.
 - **Later runs:** every skill reads these files first, so its output follows your project's conventions.
 - **Commit them** so your team and their agents share the same context. Edit them freely; when they disagree with the code, the skill follows the code and points out the stale line.
 
